@@ -1,5 +1,13 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, TouchableHighlight, Slider, StyleSheet} from 'react-native';
+import React, {useRef, useState, useEffect} from 'react';
+import {
+  SafeAreaView,
+  Animated,
+  View,
+  TouchableHighlight,
+  Text,
+  StyleSheet,
+  PanResponder,
+} from 'react-native';
 
 export default function App() {
   const [value, setValue] = useState(50);
@@ -9,89 +17,121 @@ export default function App() {
   }
 
   return (
-    <View style={styles.body}>
+    <SafeAreaView style={styles.body}>
       <View style={styles.header}>
         <Text>JOGO DOS 15</Text>
       </View>
       <View style={styles.content}>
-
         <Board n={4} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
-function Board({n}) {
-  const [board, setBoard] = useState([]);
+function createSimpleArray(n) {
+  return [...Array(n).keys()].map((i) => i + 1);
+}
 
-  useEffect(() => {
-    let i = 0;
-    let lines = [];
-    while (i < n) {
-      lines = [...lines, {line: i, cells: [], n: n}];
-      i= i+1;
+function createBoard(n) {
+  const cells = createSimpleArray(n * n);
+  cells.sort(() => 0.5 - Math.random());
+
+  const lines = createSimpleArray(n).map((line) => {
+    let groupCell = cells.splice(0, 4);
+    if (groupCell.indexOf(16) > -1) {
+      groupCell.splice(groupCell.indexOf(cells.length), 1);
     }
-    setBoard(lines);
-  }, [n]);
+    console.log(groupCell);
+    return {line, cells: groupCell};
+  });
+
+  return lines;
+}
+
+function Board({n}) {
+  const [board, setBoard] = useState(createBoard(n));
+
+  // useEffect(() => {
+  //   setBoard(createBoard(n));
+  // }, [n]);
 
   return (
     <View style={styles.board}>
-      {board.map((line, index) => (<Line key={index} line_={line} />))}
+      {board.map((line, index) => (
+        <Line key={index} line_={line} />
+      ))}
     </View>
   );
 }
 
 function Line({line_}) {
-  const [line, setLine] = useState({});
-  useEffect(() => {
-    let i = 0;
-    let cells = [];
-    let max = line_.line === line_.n -1 ? line_.n -1 : line_.n;
-    while (i < max) {
-      cells = [...cells, {index: line_.line * line_.n + i + 1}];
-      i= i+1;
-    }
-    setLine({'line': line_.line, cells});
-  }, [line_]);
+  const [line, setLine] = useState(line_);
+  const pan = useRef(new Animated.ValueXY()).current;
+  const [cellline, setCellline] = useState({});
+
+  console.log({pan});
 
   return (
     <View style={styles.line}>
-      {line && line.cells 
-        ? line.cells.map((cell, index) => (<Cell key={index} cell={cell} />)) 
-        : <Text>patos</Text>}
+      {line && line.cells ? (
+        line.cells.map((cell, index) => (
+          <Cell key={index} cell_={{cell, line: line.line}} />
+        ))
+      ) : (
+        <Text>patos</Text>
+      )}
     </View>
   );
 }
 
-function Cell({cell}) {
+function Cell({cell_}) {
+  const [cell, setCell] = useState(cell_);
 
-  function handleTouch(e) {
-    // console.log('estou','X: ' + e.nativeEvent.locationX, 'Y: ' +e.nativeEvent.locationY );
-    // console.log('fui', e.nativeEvent.touches.lenght ? 
-      // ('X: ' +e.nativeEvent.touches[0].locationX, 'Y: '+e.nativeEvent.touches[0].locationY): '');
-      console.log(e.nativeEvent);
-  }
+  const pan = useRef(new Animated.ValueXY()).current;
+
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderMove: Animated.event([
+      null,
+      {
+        dx: pan.x,
+        dy: pan.y,
+      },
+    ]),
+    onPanResponderGrant: () => {
+      pan.setOffset({x: pan.x._value, y: pan.y._value});
+    },
+    onPanResponderEnd: () => {
+      pan.flattenOffset();
+    },
+  });
+
+  useEffect(() => {
+    const teste = cell;
+    teste.pan = pan;
+    setCell(teste);
+    console.log(cell.pan);
+  }, [pan.dx, cell]);
 
   return (
-    <TouchableHighlight style={styles.cell} key={cell.index} 
-      activeOpacity={0.1}
-      underlayColor="#45bb29" onPressIn={ e => handleTouch(e)}
-      onT
-      >
-      <Text style={styles.cellText}>{cell.index + ""}</Text>
-    </TouchableHighlight>
-  )
+    <Animated.View
+      key={cell}
+      style={[pan.getLayout(), styles.cell]}
+      {...panResponder.panHandlers}>
+      <Text style={styles.cellText}>{cell_.cell + ''}</Text>
+    </Animated.View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   text: {
     fontSize: 50,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   body: {
     flex: 1,
@@ -112,9 +152,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '90%',
-    padding: 5,
-    borderWidth: 3,
-    borderColor: '#20232a',
+    padding: 5
+    // borderWidth: 3,
+    // borderColor: '#20232a',
   },
   line: {
     display: 'flex',
@@ -122,20 +162,21 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'flex-start',
     minHeight: '14%',
+    borderWidth: 0.1,
   },
   cell: {
     display: 'flex',
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     width: '22%',
     margin: 5,
-    borderWidth: 3,
-    borderColor: '#20232a',
-    backgroundColor: '#000',
+    borderWidth: 0.1
+    // borderColor: #20232a',
+    // backgroundColor: '#000',
   },
   cellText: {
     fontSize: 28,
     color: 'red',
-    fontWeight: "bold",
-  }
+    fontWeight: 'bold',
+  },
 });
