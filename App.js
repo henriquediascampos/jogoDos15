@@ -37,11 +37,10 @@ function createBoard(n) {
   cells.sort(() => 0.5 - Math.random());
 
   const lines = createSimpleArray(n).map((line) => {
-    let groupCell = cells.splice(0, 4);
+    let groupCell = cells.splice(0, n);
     if (groupCell.indexOf(16) > -1) {
-      groupCell.splice(groupCell.indexOf(cells.length), 1);
+      groupCell = groupCell.map((e) => (e === n * n ? -1 : e));
     }
-    console.log(groupCell);
     return {line, cells: groupCell};
   });
 
@@ -51,31 +50,50 @@ function createBoard(n) {
 function Board({n}) {
   const [board, setBoard] = useState(createBoard(n));
 
-  // useEffect(() => {
-  //   setBoard(createBoard(n));
-  // }, [n]);
+  useEffect(() => {
+    setBoard(createBoard(n));
+  }, [n]);
+
+  function handleUpdateLine(newline) {
+    //   const newBoard = board.reduce((curr, accu) => {
+    //     const newLine = curr.line === newline.line ? newline : curr;
+    //     accu = [...accu, newLine];
+    //     return accu;
+    //   });
+    //   setBoard(newBoard);
+  }
 
   return (
     <View style={styles.board}>
       {board.map((line, index) => (
-        <Line key={index} line_={line} />
+        <Line key={index} line_={line} handleUpdateLine={handleUpdateLine} />
       ))}
     </View>
   );
 }
 
-function Line({line_}) {
+function Line({line_, handleUpdateLine}) {
   const [line, setLine] = useState(line_);
-  const pan = useRef(new Animated.ValueXY()).current;
-  const [cellline, setCellline] = useState({});
 
-  console.log({pan});
+  function handleUpdateCell(cell_) {
+    console.log(cell_);
+    // const newCells = line.cells.reduce((curr, accu) => {
+    //   const newCell = curr.line === cell_.line ? cell_ : curr;
+    //   accu = [...accu, newCell];
+    //   return accu;
+    // });
+    // setLine({line: line.line, cells: newCells});
+  }
 
   return (
     <View style={styles.line}>
       {line && line.cells ? (
         line.cells.map((cell, index) => (
-          <Cell key={index} cell_={{cell, line: line.line}} />
+          <Cell
+            key={index}
+            cell_={{cell, line: line.line}}
+            handleUpdateCell={handleUpdateCell}
+          />
         ))
       ) : (
         <Text>patos</Text>
@@ -84,7 +102,7 @@ function Line({line_}) {
   );
 }
 
-function Cell({cell_}) {
+function Cell({cell_, handleUpdateCell}) {
   const [cell, setCell] = useState(cell_);
 
   const pan = useRef(new Animated.ValueXY()).current;
@@ -103,23 +121,21 @@ function Cell({cell_}) {
     },
     onPanResponderEnd: () => {
       pan.flattenOffset();
+      setCell({cell: cell_.cell, pan});
+      handleUpdateCell(cell);
     },
+    onPanResponderTerminationRequest: () => true,
   });
 
-  useEffect(() => {
-    const teste = cell;
-    teste.pan = pan;
-    setCell(teste);
-    console.log(cell.pan);
-  }, [pan.dx, cell]);
-
   return (
-    <Animated.View
-      key={cell}
-      style={[pan.getLayout(), styles.cell]}
-      {...panResponder.panHandlers}>
-      <Text style={styles.cellText}>{cell_.cell + ''}</Text>
-    </Animated.View>
+    <View key={cell} style={styles.cellContainer}>
+      <Animated.View
+        key={cell}
+        style={[pan.getLayout(), styles.cell]}
+        {...panResponder.panHandlers}>
+        <Text style={styles.cellText}>{cell_.cell + ''}</Text>
+      </Animated.View>
+    </View>
   );
 }
 
@@ -159,17 +175,26 @@ const styles = StyleSheet.create({
   line: {
     display: 'flex',
     flexDirection: 'row',
-    width: '100%',
+    flex: 1,
+    // width: '100%',
     justifyContent: 'flex-start',
     minHeight: '14%',
+    borderWidth: 0.1,
+  },
+  cellContainer: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'stretch',
+    margin: 5,
     borderWidth: 0.1,
   },
   cell: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '22%',
-    margin: 5,
+    width: '100%',
+    // margin: 5,
     borderWidth: 0.1
     // borderColor: #20232a',
     // backgroundColor: '#000',
