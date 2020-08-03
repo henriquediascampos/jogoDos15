@@ -9,9 +9,13 @@ export default function Cell({cell_, handleUpdateCell}) {
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: (e, gestureState) => {
-      console.log(gestureState.x0);
-    },
+    onPanResponderMove: Animated.event([
+      null,
+      {
+        dx: pan.x,
+        dy: pan.y,
+      },
+    ]),
     onPanResponderGrant: () => {
       pan.setOffset({x: pan.x._value, y: pan.y._value});
     },
@@ -25,7 +29,7 @@ export default function Cell({cell_, handleUpdateCell}) {
     onPanResponderTerminationRequest: () => true,
   });
 
-  USAR ANIMAÇÕES PARA ESQUERDA DIREITA X E Y
+  // USAR ANIMAÇÕES PARA ESQUERDA DIREITA X E Y
 
   return (
     <View key={cell} style={styles.cellContainer}>

@@ -30,8 +30,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '90%',
     padding: 5,
-    borderWidth: 3,
-    borderColor: '#20232a',
   },
   line: {
     display: 'flex',
@@ -40,7 +38,7 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'flex-start',
     minHeight: '14%',
-    borderWidth: 0.1,
+    borderWidth: 0.8,
   },
   cellContainer: {
     display: 'flex',
@@ -48,17 +46,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'stretch',
     margin: 5,
-    borderWidth: 0.1,
+    borderWidth: 0.8,
   },
   cell: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    margin: 5,
-    borderWidth: 0.1,
-    borderColor: '#20232a',
-    backgroundColor: '#000',
+    height: '100%',
+    backgroundColor: '#FFF5FF',
   },
   cellText: {
     fontSize: 28,
