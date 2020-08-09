@@ -1,44 +1,50 @@
 import React, {useRef, useState} from 'react';
 import styles from '../style';
-import {
-  Animated,
-  View,
-  Text,
-  PanResponder,
-  Button,
-  Pressable,
-} from 'react-native';
+import {Animated, View, Text, PanResponder} from 'react-native';
 
 export default function Cell({cell_, handleUpdateCell}) {
-  // fadeAnim will be used as the value for opacity. Initial Value: 0
-  const fadeAnim = useRef(new Animated.Value(0)).current;
   const [cell, setCell] = useState(cell_);
 
-  const fadeIn = () => {
-    console.log('passei');
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1000,
-    }).start();
-  };
+  const [largura, setLargura] = useState(new Animated.Value(70));
+  const [altura, setAltura] = useState(new Animated.Value(70));
+
+  Animated.sequence([
+    Animated.timing(largura, {
+      toValue: 70,
+      duration: 800,
+      useNativeDriver: false,
+    }),
+    Animated.timing(altura, {
+      toValue: 140,
+      duration: 800,
+      useNativeDriver: false,
+    }),
+  ]).start();
 
   return (
-    <Pressable
-      style={[styles.cellContainer, {translateX: fadeAnim}]}
-      onPress={fadeIn}>
-      {/* <Animated.View
-        style={[
-          styles.cell,
-          {
-            opacity: fadeAnim,
-          },
-        ]}
-        onPress={fadeIn}>
-        <Text>{cell.cell}</Text>
-      </Animated.View> */}
-    </Pressable>
+    <Animated.View
+      style={[
+        styles.cellContainer,
+        {
+          // backgroundColor: '#94c7f4',
+          width: largura,
+          height: altura,
+        },
+      ]}
+    />
   );
 }
+
+// const elevation = {
+//   shadowColor: '#000',
+//   shadowOffset: {
+//     width: 0,
+//     height: 3,
+//   },
+//   shadowOpacity: 0.27,
+//   shadowRadius: 4.65,
+//   elevation: 3,
+// };
 
 function CellComPanRespoder({cell_, handleUpdateCell}) {
   const [cell, setCell] = useState(cell_);

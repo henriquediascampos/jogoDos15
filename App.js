@@ -1,18 +1,21 @@
 import React from 'react';
-import {SafeAreaView, View, Text} from 'react-native';
+import {View, StatusBar} from 'react-native';
 
 import styles from './style';
 import Board from './components/Board';
+import Cell from './components/Cell';
+import Drag from './components/Drag';
 
-export default function App() {
+export default function exemple1() {
   return (
-    <SafeAreaView style={styles.body}>
-      <View style={styles.header}>
-        <Text>JOGO DOS 15</Text>
-      </View>
-      <View style={styles.content}>
-        <Board n={4} />
-      </View>
-    </SafeAreaView>
+    <Drag />
+    // <SafeAreaView style={styles.body}>
+    //   <View style={styles.header}>
+    //     <Text>JOGO DOS 15</Text>
+    //   </View>
+    //   <View style={styles.content}>
+    //     <Board n={4} />
+    //   </View>
+    // </SafeAreaView>
   );
 }
