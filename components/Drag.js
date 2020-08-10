@@ -18,7 +18,6 @@ export default function Drag() {
       ctx.posY = posY.value;
     },
     onActive(event, ctx) {
-      console.log(event);
       posX.value = ctx.posX + event.translationX;
       posY.value = ctx.posY + event.translationY;
     },

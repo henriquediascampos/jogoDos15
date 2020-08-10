@@ -17,16 +17,17 @@ export default function Line({line_, handleUpdateLine}) {
   }
 
   return (
-    <View
-      style={styles.line}
-      onLayout={(event) => {
-        // const layout = event;
-        // console.log(layout);
-      }}>
-      {line && line.cells ? (
-        line.cells.map((cell, index) => (
-          <Cell key={index} cell_={cell} handleUpdateCell={handleUpdateCell} />
-        ))
+    <View style={styles.line}>
+      {line && line.getCells() ? (
+        line
+          .getCells()
+          .map((cell, index) => (
+            <Cell
+              key={index}
+              cell_={cell}
+              handleUpdateCell={handleUpdateCell}
+            />
+          ))
       ) : (
         <Text>patos</Text>
       )}

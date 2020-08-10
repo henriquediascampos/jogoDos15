@@ -1,37 +1,64 @@
 import React, {useRef, useState} from 'react';
 import styles from '../style';
-import {Animated, View, Text, PanResponder} from 'react-native';
+import {
+  View,
+  Text,
+  PanResponder,
+  Dimensions,
+  useWindowDimensions,
+} from 'react-native';
+
+import Animated, {
+  useAnimatedGestureHandler,
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
+import {PanGestureHandler} from 'react-native-gesture-handler';
+import MOVE from '../model/EMove';
 
 export default function Cell({cell_, handleUpdateCell}) {
   const [cell, setCell] = useState(cell_);
 
-  const [largura, setLargura] = useState(new Animated.Value(70));
-  const [altura, setAltura] = useState(new Animated.Value(70));
+  const posX = useSharedValue(0);
+  const posY = useSharedValue(0);
 
-  Animated.sequence([
-    Animated.timing(largura, {
-      toValue: 70,
-      duration: 800,
-      useNativeDriver: false,
-    }),
-    Animated.timing(altura, {
-      toValue: 140,
-      duration: 800,
-      useNativeDriver: false,
-    }),
-  ]).start();
+  const onGestureteste = useAnimatedGestureHandler({
+    onStart(eventm, ctx) {
+      ctx.posX = posX.value;
+      ctx.posY = posY.value;
+    },
+    onActive(event, ctx) {
+      if (cell.move === MOVE.DOWN && event.translationY > 0) {
+        posY.value = ctx.posY + event.translationY;
+      } else if (cell.move === MOVE.UP && event.translationY < 0) {
+        posY.value = ctx.posY + event.translationY;
+      } else if (cell.move === MOVE.LEFT && event.translationX < 0) {
+        posX.value = ctx.posX + event.translationX;
+      } else if (cell.move === MOVE.RIGHT && event.translationX > 0) {
+        posX.value = ctx.posX + event.translationX;
+      }
+    },
+    onEnd() {
+      posX.value = withSpring(0);
+      posY.value = withSpring(0);
+    },
+  });
+
+  const positionStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{translateX: posX.value}, {translateY: posY.value}],
+    };
+  });
 
   return (
-    <Animated.View
-      style={[
-        styles.cellContainer,
-        {
-          // backgroundColor: '#94c7f4',
-          width: largura,
-          height: altura,
-        },
-      ]}
-    />
+    <View style={styles.cellContainer}>
+      <PanGestureHandler onGestureEvent={onGestureteste}>
+        <Animated.View style={[styles.cell, positionStyle]}>
+          <Text>{cell.cell}</Text>
+        </Animated.View>
+      </PanGestureHandler>
+    </View>
   );
 }
 
