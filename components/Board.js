@@ -45,9 +45,7 @@ export default function Board({n}) {
   }
 
   return (
-    <View
-      style={styles.board}
-      onLayout={(event) => console.log(event.nativeEvent)}>
+    <View style={styles.board}>
       {board.getLines().map((line, index) => (
         <Line key={index} line_={line} handleUpdateLine={handleUpdateLine} />
       ))}

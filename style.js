@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     width: '90%',
     margin: 5,
     padding: 3,
-    borderWidth: 1
+    borderWidth: 1,
     // shadowColor: '#000',
     // shadowOffset: {
     // width: 1,
@@ -59,11 +59,16 @@ const styles = StyleSheet.create({
     padding: 1,
   },
   cell: {
-    // display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
     backgroundColor: 'skyblue',
+  },
+  cellEmpty: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    backgroundColor: 'red',
   },
   cellText: {
     fontSize: 28,
