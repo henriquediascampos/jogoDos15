@@ -71,9 +71,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
   },
   cellText: {
-    fontSize: 28,
-    color: 'red',
-    fontWeight: 'bold',
+    // color: 'red',
+    // fontWeight: 'bold',
+    fontSize: 30,
   },
 });
 

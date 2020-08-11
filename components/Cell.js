@@ -43,46 +43,20 @@ export default function Cell({cell_, handleUpdateCell}) {
   const positionStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateX: posX.value}, {translateY: posY.value}],
+      zIndex: 99,
+      elevation: 99,
     };
   });
 
-  // const aref = useAnimatedRef();
-  // if (cell.cell === -1) {
-  //   console.log(aref.pageX);
-  // }
-
-  // useDerivedValue(() => {
-  //   if (cell.cell === -1) {
-  //     console.log(aref.current);
-  //   }
-  // }, []);
   return (
-    <View
-      style={styles.cellContainer}
-      onHandlerStateChange={(event) => {
-        if (cell.cell === -1) {
-          console.log(event.nativeEvent);
-        }
-      }}
-      // ref={aref}
-      // onLayout={(event) => {
-      //   if (cell.cell === -1) {
-      //     // console.log(event.nativeEvent);
-      //   }
-      // }}
-      // onStartShouldSetResponder={(a) => {
-      //   if (cell.cell === -1) {
-      //     console.log(a.target);
-      //   }
-      // }}
-    >
+    <View style={styles.cellContainer}>
       <PanGestureHandler onGestureEvent={onGestureteste}>
         <Animated.View
           style={[
             cell.cell !== -1 ? styles.cell : styles.cellEmpty,
             positionStyle,
           ]}>
-          <Text>{cell.cell}</Text>
+          <Text style={styles.cellText}>{cell.cell}</Text>
         </Animated.View>
       </PanGestureHandler>
     </View>

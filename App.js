@@ -8,13 +8,17 @@ import Drag from './components/Drag';
 
 export default function exemple1() {
   return (
-    <SafeAreaView style={styles.body}>
+    <View
+      style={styles.body}
+      onStartShouldSetResponderCapture={(evt) => {
+        console.log(evt.currentTarget);
+      }}>
       <View style={styles.header}>
         <Text>JOGO DOS 15</Text>
       </View>
       <View style={styles.content}>
         <Board n={4} />
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
