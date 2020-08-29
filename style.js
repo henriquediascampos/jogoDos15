@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     width: '90%',
     margin: 5,
     padding: 3,
-    borderWidth: 1,
+    borderWidth: 1
     // shadowColor: '#000',
     // shadowOffset: {
     // width: 1,
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   cellText: {
     // color: 'red',
     // fontWeight: 'bold',
-    fontSize: 30,
+    fontSize: 15,
   },
 });
 
