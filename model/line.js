@@ -56,4 +56,17 @@ export default class lineClass {
       cell.setMove(indexEmptySpace, cellIndex, move);
     });
   }
+
+  setLayout(cell, layout) {
+    this.getCells().forEach(c => {
+      if (cell.cell === c.cell) {
+        cell.setLayout(layout)
+      }
+    });
+  }
+
+  getCell(cell) {
+    const cellFilter = this.getCells().filter(c => c.cell === cell.cell)
+    return cellFilter ? cellFilter[0] : cellFilter;
+  }
 }

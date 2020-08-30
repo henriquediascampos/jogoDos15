@@ -1,9 +1,12 @@
 import MOVE from './EMove';
 
 export default class cellClass {
-  constructor(cell, move) {
+  constructor(cell, move, layout, x, y) {
     this.cell = cell;
     this.move = move;
+    this.layout = layout;
+    this.x = x;
+    this.y = y;
   }
 
   getMove() {
@@ -12,6 +15,18 @@ export default class cellClass {
 
   getCell() {
     return this.cell;
+  }
+
+  getLayout() {
+    return this.layout;
+  }
+
+  getX() {
+    return this.x
+  }
+
+  getY() {
+    return this.y
   }
 
   setCell(cell) {
@@ -36,5 +51,21 @@ export default class cellClass {
         this.move = MOVE.UP;
       }
     }
+  }
+
+  setLayout(layout) {
+    this.layout = layout;
+  }
+
+  setX(x) {
+    this.x = x;
+  }
+
+  setY(y) {
+    this.y = y;
+  }
+
+  checkThisIsMatchPosition(x, y) {
+    console.log(x, y);
   }
 }

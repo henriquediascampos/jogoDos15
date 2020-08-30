@@ -3,21 +3,11 @@ import {View, Text} from 'react-native';
 import styles from '../style';
 import Cell from './Cell';
 
-export default function Line({line_, handleUpdateLine}) {
+export default function Line({line_}) {
   const [line, setLine] = useState(line_);
 
-  function handleUpdateCell(cell_) {
-    const newCells = line.cells.reduce((accu, curr) => {
-      const newCell = curr.cell === cell_.cell ? cell_ : curr;
-      accu = [...accu, newCell];
-      return accu;
-    }, []);
-    setLine({line: line.line, cells: newCells});
-    handleUpdateLine(line);
-  }
-
   return (
-    <View style={styles.line}>
+    <View style={styles.line} >
       {line && line.getCells() ? (
         line
           .getCells()
@@ -25,7 +15,6 @@ export default function Line({line_, handleUpdateLine}) {
             <Cell
               key={index}
               cell_={cell}
-              handleUpdateCell={handleUpdateCell}
             />
           ))
       ) : (

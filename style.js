@@ -32,14 +32,6 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 3,
     borderWidth: 1
-    // shadowColor: '#000',
-    // shadowOffset: {
-    // width: 1,
-    // height: 1,
-    // },
-    // shadowOpacity: 0.5,
-    // shadowRadius: 5
-    // elevation: 7,
   },
   line: {
     flexDirection: 'row',
@@ -49,7 +41,6 @@ const styles = StyleSheet.create({
     borderWidth: 0.8,
   },
   cellContainer: {
-    // display: 'flex',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'stretch',
