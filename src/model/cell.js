@@ -59,9 +59,6 @@ export default class cellClass {
                 this.move = MOVE.DOWN;
             }
         }
-        if (this.move) {
-            // console.log(this.cell, indexEmptyCellSpace, indexCurrentCell, move, this.move);
-        }
     }
 
     setLayout(layout) {

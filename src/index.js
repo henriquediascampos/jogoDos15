@@ -8,21 +8,7 @@ import BoardContext from './model/boardContext';
 import { Picker } from '@react-native-community/picker';
 
 export default function exemple1() {
-    const [n, setN] = useState("3");
-    const [board, setBoard] = useState(new BoardClass(parseInt(n)));
-
-    // useEffect(() => {
-    //     // console.log("====================================================================================");
-    //     const value = parseInt(n);
-    //     // console.log(value);
-    //     const newboard = new BoardClass(value);
-    //     setBoard(newboard);
-    //     // console.log(newboard);
-    //     // console.log(board);
-    //     // if (board && board.reboot) {
-    //     //     board.reboot(n);
-    //     // }
-    // }, [n]);
+    const [n, setN] = useState("4");
 
     return (
         <SafeAreaView style={styles.body}>
@@ -39,8 +25,8 @@ export default function exemple1() {
                 <Picker.Item label="4 X 4" value="4" />
             </Picker>
             <View style={styles.content}>
-                <BoardContext.Provider value={board}>
-                    <Board board={board} />
+                <BoardContext.Provider value={new BoardClass(parseInt(n))}>
+                    <Board n={parseInt(n)} />
                 </BoardContext.Provider>
             </View>
         </SafeAreaView>

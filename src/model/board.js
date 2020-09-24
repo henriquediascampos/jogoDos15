@@ -13,14 +13,13 @@ class BoardClass {
 
     constructor(n) {
         this.n = n;
-        this.lockMatch = false;
         this.createBoard();
     }
 
     reboot(n) {
         this.n = n;
         this.lockMatch = false;
-        this.createBoard(); 
+        this.createBoard();
     }
 
     reloadBoard() {
@@ -68,6 +67,20 @@ class BoardClass {
         return [...Array(n).keys()].map((i) => i + 1);
     }
 
+    newRender(n) {
+
+        if (n) {
+            this.lines = [];
+            this.n = n;
+            this.move = {};
+            this.lockMatch = false;
+            this.layout = null;
+            this.cellToRender = [];
+        }
+        this.createBoard()
+        return this;
+    }
+
     createBoard() {
         this.lines = this.createNewLines()
         this.setEmptySpace();
@@ -83,7 +96,7 @@ class BoardClass {
     createNewLines() {
         const cells = this.createCells()
         return this.createSimpleArray(this.n).map((line_) => {
-            let groupCell = cells.splice(0, this.n);
+            const groupCell = cells.splice(0, this.n);
             return new lineClass(line_ - 1, groupCell);
         });
     }
@@ -164,17 +177,17 @@ class BoardClass {
         }
         return isMatch
     }
-    
+
     checkThisIsMatchPosition(cellValue, x, y) {
         if (!this.getLockMatch()) {
             const cellIsEmpty = this.getCellIsEmpty();
             const layoutCellIsEmpty = cellIsEmpty.getLayout();
             const lineIsEmpty = this.getLine(cellIsEmpty).lineFilter.getLayout();
-            
+
             const { cellFilter } = this.getCell(cellValue)
             const layout = cellFilter.getLayout();
             const line = this.getLine(cellFilter).lineFilter.getLayout();
-            
+
             const xMove = layout.layout.x + x;
             const yMove = layout.layout.y + y + line.layout.y;
             const approximation = layout.layout.height * 0.45;
