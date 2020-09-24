@@ -10,7 +10,6 @@ class BoardClass {
     lockMatch = false;
     layout = null;
     cellToRender = [];
-    reloadBoard = () => { };
 
     constructor(n) {
         this.n = n;
@@ -18,11 +17,13 @@ class BoardClass {
         this.createBoard();
     }
 
-    setReloadBoard(reloadBoard) {
-        this.reloadBoard = reloadBoard;
+    reboot(n) {
+        this.n = n;
+        this.lockMatch = false;
+        this.createBoard(); 
     }
 
-    getReloadBoard() {
+    reloadBoard() {
         this.setEmptySpace();
         this.setMove();
         this.reload();
@@ -42,33 +43,8 @@ class BoardClass {
         this.cellToRender = [...this.cellToRender, cell];
     }
 
-    monitor() {
-        const cellFilter = this.getLines().reduce((accu, curr) => {
-            return [...accu, ...curr.getCells()];
-        }, [])
-            .filter(c => c.getMove())
-            .map(c => ({ 'move': c.getMove(), 'cell': c.getCell() }));
-
-    }
-
     getLines() {
         return this.lines;
-    }
-
-    setLine(lines) {
-        this.lines = lines;
-    }
-
-    getLineMove() {
-        let lineMove = -1;
-        this.lines.forEach((line) => {
-            lineMove =
-                lineMove === -1 && line.cells.indexOf(-1) !== -1
-                    ? line.cells.indexOf(-1)
-                    : -1;
-        });
-
-        return lineMove;
     }
 
     getLockMatch() {
@@ -235,7 +211,7 @@ class BoardClass {
             });
         });
 
-        this.getReloadBoard();
+        this.reloadBoard();
     }
 
     setRenderCell(value, rederCell) {
@@ -248,13 +224,13 @@ class BoardClass {
         });
     }
 
-    getCellByValue(value) {
-        const teste = this.getLines().reduce((accu, curr) => {
-            return [...accu, ...curr.getCells()];
-        }, [])
-        .filter(c => c.cell === value)[0];
-        return teste;
-    }
+    // getCellByValue(value) {
+    //     const teste = this.getLines().reduce((accu, curr) => {
+    //         return [...accu, ...curr.getCells()];
+    //     }, [])
+    //     .filter(c => c.cell === value)[0];
+    //     return teste;
+    // }
 
     getMove(cellValue) {
         if (cellValue) {
