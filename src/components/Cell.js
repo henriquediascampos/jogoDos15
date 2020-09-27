@@ -34,13 +34,13 @@ const Cell = ({ cell }) => {
         move.value = board.getMove(value.value);
 
     }
-    
+
     const onGestureteste = useAnimatedGestureHandler({
         onStart(event, ctx) {
             ctx.posX = posX.value;
             ctx.posY = posY.value;
             getMove();
-            cancelAnimation({value: 0}) 
+            cancelAnimation({value: 0})
         },
         onActive(event, ctx) {
             getLockMatch();
@@ -74,7 +74,7 @@ const Cell = ({ cell }) => {
     const positionStyle = useAnimatedStyle(() => {
         return {
             transform: [
-                { translateY: posY.value }, 
+                { translateY: posY.value },
                 { translateX: posX.value }
             ],
         };

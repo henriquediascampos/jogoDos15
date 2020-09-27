@@ -9,7 +9,6 @@ import { Picker } from '@react-native-community/picker';
 
 export default function exemple1() {
     const [n, setN] = useState("4");
-
     return (
         <SafeAreaView style={styles.body}>
             <View style={styles.header}>

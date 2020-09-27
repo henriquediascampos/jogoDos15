@@ -2,7 +2,6 @@ import cellClass from '../model/cell';
 import lineClass from '../model/line';
 import MOVE from './EMove';
 
-
 class BoardClass {
     move = {};
     lines = [];
@@ -26,7 +25,35 @@ class BoardClass {
         this.setEmptySpace();
         this.setMove();
         this.reload();
+        this.checkBoardComplete()
         this.setLockMatch(false);
+    }
+
+    /**
+     * 1  2  3
+     * 4  5  6
+     * 7  8  0
+     *
+     *
+     * 1  2  3  4
+     * 5  6  7  8
+     * 9  10 11 12
+     * 13 14 15 0
+     */
+    checkBoardComplete() {
+        let numberStartLine = 1;
+        const complete = this.getLines().map(line => {
+            let numberCellSequence = (this.n * numberStartLine) - (this.n - 1);
+            numberStartLine++;
+            return line.getCells().filter(cell => {
+                numberCellSequence = numberCellSequence === this.n * this.n ? -1 : numberCellSequence;
+                const equals = cell.cell !== numberCellSequence;
+                numberCellSequence++;
+                return equals;
+            }).length === 0;
+        });
+
+        console.log(complete);
     }
 
     reload() {
